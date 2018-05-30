@@ -77,7 +77,7 @@
   </dependencies>
   
   <build>
-  <finalName>confluence-doc-generator-0.0.1</finalName>
+  <finalName>confluence-doc-generator-1.0</finalName>
   <plugins>
     <plugin>
     <artifactId>maven-assembly-plugin</artifactId>
