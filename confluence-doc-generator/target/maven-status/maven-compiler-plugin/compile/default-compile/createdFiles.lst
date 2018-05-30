@@ -1,0 +1,5 @@
+com/taiger/nlp/confluence_doc_generator/CommandExecutor.class
+com/taiger/nlp/confluence_doc_generator/CommandLineOptions.class
+com/taiger/nlp/confluence_doc_generator/Generator.class
+com/taiger/nlp/confluence_doc_generator/Requester.class
+com/taiger/nlp/confluence_doc_generator/Configuration.class

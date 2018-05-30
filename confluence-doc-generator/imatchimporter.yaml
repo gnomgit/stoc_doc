@@ -1,0 +1,829 @@
+swagger: '2.0'
+info:
+  description: imatchImporter API documentation
+  title: imatchImporter API
+  version: 0.0.1
+host: '0.0.0.0:8080'
+basePath: /imatchimporter
+schemes:
+  - http
+paths:
+  /api/export:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/csv
+      parameters:
+        - description: processorType
+          in: body
+          name: processorType
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '201':
+          description: Created
+        '204':
+          description: No Data Available
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized - API operation not allowed for this api key
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: |
+            iMatch Codes:
+
+            |Code | Description|
+            |-------|------|------|------|
+            | '8003-000' | be.imatch.importer.ok|
+            | '8003-020' | be.imatch.importer.ko.urlFormat|
+            | '8003-120' | KEY is NULL to classifier annotation CSV|
+            | '8003-099' | be.imatch.importer.ko.default|
+        '501':
+          description: Not Implemented
+        '502':
+          description: Bad Gateway
+        '503':
+          description: Service Unavailable
+        '504':
+          description: Gateway Timeout
+      tags:
+        - dump-resource
+      description: POST export from database
+      operationId: exportFromDatabaseUsingPOST
+      summary: exportFromDatabase
+  /api/profile-info:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProfileInfoResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      tags:
+        - profile-info-resource
+      operationId: getActiveProfilesUsingGET
+      summary: getActiveProfiles
+  '/api/upload/training/{type}':
+    post:
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - description: trainingResource
+          in: formData
+          name: trainingResource
+          required: true
+          type: string
+        - description: file
+          in: formData
+          name: file
+          required: true
+          type: file
+        - description: type
+          in: path
+          name: type
+          required: true
+          type: string
+        - description: AnnotationCSVKey
+          in: query
+          name: AnnotationCSVKey
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Training'
+        '201':
+          description: Created
+        '204':
+          description: No Data Available - empty Training
+          schema:
+            $ref: '#/definitions/Training'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized - API operation not allowed for this api key
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: |
+            iMatch Codes:
+
+            |Code | Description|
+            |-------|------|------|------|
+            | '8003-000' | be.imatch.importer.ok|
+            | '8003-020' | be.imatch.importer.ko.urlFormat|
+            | '8003-120' | KEY is NULL to classifier annotation CSV|
+            | '8003-099' | be.imatch.importer.ko.default|
+        '501':
+          description: Not Implemented
+        '502':
+          description: Bad Gateway
+        '503':
+          description: Service Unavailable
+        '504':
+          description: Gateway Timeout
+      tags:
+        - importer-resource
+      description: POST Upload training file by type
+      operationId: uploadTrainingFileByTypeUsingPOST
+      summary: uploadTrainingFileByType
+  '/api/upload/{type}':
+    post:
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - description: resource
+          in: formData
+          name: resource
+          required: true
+          type: string
+        - description: file
+          in: formData
+          name: file
+          required: true
+          type: file
+        - description: type
+          in: path
+          name: type
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Resource'
+        '201':
+          description: Created
+        '204':
+          description: No Data Available - empty Resource
+          schema:
+            $ref: '#/definitions/Resource'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized - API operation not allowed for this api key
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: |
+            iMatch Codes:
+
+            |Code | Description|
+            |-------|------|------|------|
+            | '8003-000' | be.imatch.importer.ok|
+            | '8003-020' | be.imatch.importer.ko.urlFormat|
+            | '8003-120' | KEY is NULL to classifier annotation CSV|
+            | '8003-099' | be.imatch.importer.ko.default|
+        '501':
+          description: Not Implemented
+        '502':
+          description: Bad Gateway
+        '503':
+          description: Service Unavailable
+        '504':
+          description: Gateway Timeout
+      tags:
+        - importer-resource
+      description: POST Upload file to file system
+      operationId: uploadFileByTypeUsingPOST_1
+      summary: uploadFileByType
+  '/api/upload/{type}/{storageType}':
+    post:
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - description: resource
+          in: formData
+          name: resource
+          required: true
+          type: string
+        - description: file
+          in: formData
+          name: file
+          required: true
+          type: file
+        - description: type
+          in: path
+          name: type
+          required: true
+          type: string
+        - description: storageType
+          in: path
+          name: storageType
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Resource'
+        '201':
+          description: Created
+        '204':
+          description: No Data Available - empty Resource
+          schema:
+            $ref: '#/definitions/Resource'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized - API operation not allowed for this api key
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: |
+            iMatch Codes:
+
+            |Code | Description|
+            |-------|------|------|------|
+            | '8003-000' | be.imatch.importer.ok|
+            | '8003-020' | be.imatch.importer.ko.urlFormat|
+            | '8003-120' | KEY is NULL to classifier annotation CSV|
+            | '8003-099' | be.imatch.importer.ko.default|
+        '501':
+          description: Not Implemented
+        '502':
+          description: Bad Gateway
+        '503':
+          description: Service Unavailable
+        '504':
+          description: Gateway Timeout
+      tags:
+        - importer-resource
+      deprecated: true
+      description: POST Upload file to file system
+      operationId: uploadFileByTypeUsingPOST
+      summary: uploadFileByType
+  '/api/{fileIndentifier}':
+    delete:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - description: fileIndentifier
+          in: path
+          name: fileIndentifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: boolean
+        '204':
+          description: No Data Available - empty Boolean
+          schema:
+            type: boolean
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized - API operation not allowed for this api key
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: |
+            iMatch Codes:
+
+            |Code | Description|
+            |-------|------|------|------|
+            | '8003-000' | be.imatch.importer.ok|
+            | '8003-020' | be.imatch.importer.ko.urlFormat|
+            | '8003-120' | KEY is NULL to classifier annotation CSV|
+            | '8003-099' | be.imatch.importer.ko.default|
+        '501':
+          description: Not Implemented
+        '502':
+          description: Bad Gateway
+        '503':
+          description: Service Unavailable
+        '504':
+          description: Gateway Timeout
+      tags:
+        - importer-resource
+      description: DELETE file from system by identifier
+      operationId: deleteFileUsingDELETE
+      summary: deleteFile
+    get:
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - description: fileIndentifier
+          in: path
+          name: fileIndentifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+        '204':
+          description: No Data Available
+          schema:
+            type: object
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized - API operation not allowed for this api key
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: |
+            iMatch Codes:
+
+            |Code | Description|
+            |-------|------|------|------|
+            | '8003-000' | be.imatch.importer.ok|
+            | '8003-020' | be.imatch.importer.ko.urlFormat|
+            | '8003-120' | KEY is NULL to classifier annotation CSV|
+            | '8003-099' | be.imatch.importer.ko.default|
+        '501':
+          description: Not Implemented
+        '502':
+          description: Bad Gateway
+        '503':
+          description: Service Unavailable
+        '504':
+          description: Gateway Timeout
+      tags:
+        - importer-resource
+      description: GET file by identifier from system
+      operationId: serveFileUsingGET
+      summary: serveFile
+definitions:
+  Attribute:
+    properties:
+      consolidationIdentifier:
+        type: string
+      editedBy:
+        type: string
+      editedDate:
+        $ref: '#/definitions/Timestamp'
+        description: timestamp of edition
+        example: '1488800328'
+      feedbacks:
+        items:
+          $ref: '#/definitions/Feedback'
+        type: array
+      key:
+        type: string
+      locationIds:
+        items:
+          $ref: '#/definitions/AttributeLocation'
+        type: array
+      origin:
+        $ref: '#/definitions/Origin'
+      validation:
+        $ref: '#/definitions/AttributeValidation'
+      values:
+        items:
+          $ref: '#/definitions/Values'
+        type: array
+    type: object
+  AttributeLocation:
+    properties:
+      end:
+        format: int64
+        type: integer
+      id:
+        type: string
+      start:
+        format: int64
+        type: integer
+    type: object
+  AttributeValidation:
+    properties:
+      confidence:
+        format: double
+        type: number
+      rejectReason:
+        type: string
+      slaCompliant:
+        type: boolean
+      supervised:
+        type: boolean
+      supervision:
+        type: string
+      valid:
+        type: boolean
+      validationType:
+        type: string
+    type: object
+  Consolidation:
+    properties:
+      consolidationIdentifier:
+        type: string
+      country:
+        type: string
+      creation:
+        $ref: '#/definitions/Timestamp'
+        description: timestamp of creation
+        example: '1488800328'
+      description:
+        type: string
+      docType:
+        type: string
+      identifierOfSet:
+        type: string
+      key:
+        type: string
+      language:
+        type: string
+      path:
+        type: string
+      resourceIdentifier:
+        type: string
+      subtype:
+        type: string
+      values:
+        items:
+          type: string
+        type: array
+    type: object
+  Edition:
+    properties:
+      creation:
+        $ref: '#/definitions/Timestamp'
+        description: timestamp of creation
+        example: '1488800328'
+      editor:
+        type: string
+      modified:
+        $ref: '#/definitions/Timestamp'
+        description: timestamp of last modification
+        example: '1488800329'
+      resourceVersion:
+        format: int32
+        type: integer
+    type: object
+  Feedback:
+    properties:
+      comment:
+        type: string
+      creation:
+        $ref: '#/definitions/Timestamp'
+        description: timestamp of creation
+        example: '1488800328'
+      userIdentifier:
+        type: string
+    type: object
+  Information:
+    properties:
+      classifier:
+        type: boolean
+      country:
+        type: string
+      creator:
+        type: string
+      edition:
+        $ref: '#/definitions/Edition'
+      fileName:
+        type: string
+      format:
+        type: string
+      language:
+        type: string
+      licenseId:
+        format: int64
+        type: integer
+      md5Hash:
+        type: string
+      path:
+        type: string
+      processor:
+        $ref: '#/definitions/Processor'
+      quoteId:
+        format: int64
+        type: integer
+      size:
+        format: int64
+        type: integer
+      subtype:
+        type: string
+      textExtractor:
+        type: string
+      transformerOCRFile:
+        type: string
+      type:
+        type: string
+      uploadDate:
+        format: int64
+        type: integer
+      uploadId:
+        type: string
+      validation:
+        $ref: '#/definitions/Validation'
+    type: object
+  Location:
+    type: object
+  LocationData:
+    properties:
+      location:
+        $ref: '#/definitions/Location'
+      locationId:
+        type: string
+      locationType:
+        type: string
+      parsedText:
+        type: string
+    type: object
+  Origin:
+    properties:
+      details:
+        type: string
+      originType:
+        type: string
+    type: object
+  Processor:
+    properties:
+      processorType:
+        type: string
+      processorVersion:
+        format: int32
+        type: integer
+    type: object
+  ProfileInfoResponse:
+    properties:
+      activeProfiles:
+        items:
+          type: string
+        type: array
+      ribbonEnv:
+        type: string
+    type: object
+  Resource:
+    properties:
+      consolidations:
+        additionalProperties:
+          items:
+            $ref: '#/definitions/Consolidation'
+          type: array
+        type: object
+      error:
+        $ref: '#/definitions/ResultError'
+      gateXml:
+        type: string
+      id:
+        type: string
+      information:
+        $ref: '#/definitions/Information'
+      locations:
+        items:
+          $ref: '#/definitions/LocationData'
+        type: array
+      ocrCleanserTxt:
+        type: string
+      ocrXml:
+        type: string
+      operation:
+        type: string
+      sections:
+        items:
+          $ref: '#/definitions/Sections'
+        type: array
+      status:
+        format: int32
+        type: integer
+      status_corpus:
+        format: int32
+        type: integer
+      status_upload:
+        format: int32
+        type: integer
+      text:
+        type: string
+      textPlain:
+        additionalProperties:
+          type: string
+        type: object
+      transformerOCRXML:
+        type: string
+    type: object
+  ResultError:
+    properties:
+      developerMessage:
+        type: string
+      errorCode:
+        type: string
+      errorCodeDescription:
+        type: string
+      errorDesc:
+        type: string
+      moreInfo:
+        type: string
+    type: object
+  Sections:
+    properties:
+      attributes:
+        items:
+          $ref: '#/definitions/Attribute'
+        type: array
+      children:
+        items:
+          $ref: '#/definitions/Sections'
+        type: array
+      label:
+        type: string
+    type: object
+  Timestamp:
+    properties:
+      date:
+        format: int32
+        type: integer
+      day:
+        format: int32
+        type: integer
+      hours:
+        format: int32
+        type: integer
+      minutes:
+        format: int32
+        type: integer
+      month:
+        format: int32
+        type: integer
+      nanos:
+        format: int32
+        type: integer
+      seconds:
+        format: int32
+        type: integer
+      time:
+        format: int64
+        type: integer
+      timezoneOffset:
+        format: int32
+        type: integer
+      year:
+        format: int32
+        type: integer
+    type: object
+  Training:
+    properties:
+      author:
+        type: string
+      creation:
+        $ref: '#/definitions/Timestamp'
+      description:
+        type: string
+      docType:
+        type: string
+      environmentForKnowledgeAnalysis:
+        type: string
+      id:
+        type: string
+      idAllFeatureARRFF:
+        type: string
+      idAllFeatureCSV:
+        type: string
+      idAnnotationCSV:
+        additionalProperties:
+          type: string
+        type: object
+      idFeatureText:
+        type: string
+      idModel:
+        type: string
+      idsResources:
+        items:
+          type: string
+        type: array
+      modelAccuracy:
+        format: double
+        type: number
+      modelAccuracyDescription:
+        type: string
+      modelType:
+        type: string
+      modified:
+        $ref: '#/definitions/Timestamp'
+      numberOfResources:
+        format: int32
+        type: integer
+      status:
+        format: int32
+        type: integer
+      subType:
+        additionalProperties:
+          type: string
+        type: object
+      trainingName:
+        type: string
+      trainingTime:
+        $ref: '#/definitions/Timestamp'
+    type: object
+  Validation:
+    properties:
+      confidence:
+        format: double
+        type: number
+      dpi:
+        format: int32
+        type: integer
+      mobile:
+        type: boolean
+      pages:
+        format: int32
+        type: integer
+      rejectReason:
+        type: string
+      slaCompliant:
+        type: boolean
+      slaLowerThreshold:
+        format: float
+        type: number
+      slaNotSupervisedDatapoint:
+        format: float
+        type: number
+      slaNotSupervisedDocument:
+        format: float
+        type: number
+      slaSupervisedExplicitDatapoint:
+        format: float
+        type: number
+      slaSupervisedInferedDatapoint:
+        format: float
+        type: number
+      slaThreshold:
+        format: float
+        type: number
+      slaValue:
+        format: float
+        type: number
+      supervised:
+        type: boolean
+      supervision:
+        type: string
+      suspicious_rate:
+        format: float
+        type: number
+      valid:
+        type: boolean
+      validationType:
+        type: string
+    type: object
+  Values:
+    properties:
+      backwardContext:
+        type: string
+      forwardContext:
+        type: string
+      lineBackwardContext:
+        type: string
+      lineForwardContext:
+        type: string
+      normalizeValue:
+        type: string
+      oneWordAfterContext:
+        type: string
+      originalNormalizeValue:
+        type: string
+      originalValue:
+        type: string
+      surroundContext:
+        type: string
+    type: object
+tags:
+  - description: Profile Info Resource
+    name: profile-info-resource
+  - description: Importer Resource
+    name: importer-resource
+  - description: Dump Resource
+    name: dump-resource
+
