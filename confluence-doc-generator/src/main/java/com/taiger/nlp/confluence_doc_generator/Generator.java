@@ -32,6 +32,7 @@ public class Generator {
     	Configuration.loadProperties();
     	Configuration.loadOptions(clo);
     	generate ();
+    	
     }
     
     private static void generate () {
